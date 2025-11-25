@@ -1,0 +1,2 @@
+# Sistema-de-Express-o-Sem-Fio-para-Guitarra-ESP32-ESP-NOW-
+Firmware desenvolvido para Trabalho de Conclusão de Curso em Engenharia Eletrônica. O projeto consiste em um pedal de expressão sem fio que atua sobre um circuito de overdrive analógico. O sistema utiliza dois módulos ESP32 comunicando-se via ESP-NOW , onde o transmissor captura a inclinação e o receptor modula a resistência de um LDR via PWM.
