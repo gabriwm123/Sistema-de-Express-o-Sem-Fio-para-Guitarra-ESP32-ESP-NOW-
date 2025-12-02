@@ -87,7 +87,7 @@ void setup() {
   delay(1000); // Delay para estabilizar
   
   Serial.println();
-  Serial.println("===== ESP32 #1 - TRANSMISSOR (FILTRO COMPLEMENTAR v3 - YAW) ====="); // <-- MUDANÇA
+  Serial.println("===== ESP32 #1 - TRANSMISSOR (FILTRO COMPLEMENTAR v3 - YAW) =====");
   Serial.println();
   
   // Informações de configuração
