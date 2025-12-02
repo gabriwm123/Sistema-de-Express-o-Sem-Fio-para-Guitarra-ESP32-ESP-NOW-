@@ -97,10 +97,10 @@ void setup() {
   Serial.println("  Duty Mínimo: " + String(DUTY_MINIMO));
   Serial.println("  Duty Máximo: " + String(DUTY_MAXIMO));
   Serial.println("  Gamma: " + String(GAMMA_VALUE, 1));
-  Serial.println("  Medindo Ângulo: Yaw (Direção, X/Y)"); // <-- MUDANÇA
+  Serial.println("  Medindo Ângulo: Yaw (Direção, X/Y)");
   Serial.println();
   
-  // Inicialização MPU9250 (mantendo seu código robusto de retentativas)
+  // Inicialização MPU9250 (com retentativas)
   pinMode(HSPI_CS, OUTPUT);
   digitalWrite(HSPI_CS, HIGH);
   hspi.begin(HSPI_SCLK, HSPI_MISO, HSPI_MOSI, HSPI_CS);
@@ -146,7 +146,7 @@ void setup() {
   delay(100);
   Serial.println("✓ MPU9250 (Acel + Giro) configurado e pronto!");
 
-  // ESP-NOW (seu código, mantido)
+  
   Serial.println();
   Serial.println("Inicializando ESP-NOW...");
   WiFi.mode(WIFI_STA);
@@ -214,7 +214,7 @@ void loop() {
   float accelX = ax_raw / accelScale;
   float accelY = ay_raw / accelScale;
   float accelZ = az_raw / accelScale;
-  float gyroZ = gz_raw / gyroScale; // <-- MUDANÇA: Usando o Giro Z para o Yaw
+  float gyroZ = gz_raw / gyroScale;
   
   // Suavização (mantendo sua lógica de filtro 'alpha' no acelerômetro)
   const float alpha = 0.2;
@@ -226,7 +226,7 @@ void loop() {
   // 2. FILTRO COMPLEMENTAR (para YAW)
   // ========================================
   
-  // Ângulo do Acelerômetro (Yaw) - Sua lógica original
+  // Ângulo do Acelerômetro (Yaw)
   // Mede o ângulo "lento" baseado na direção da gravidade (X e Y)
   float rawAngle = atan2(accelX_smooth, accelY_smooth) * 180.0 / PI;
   float invertedAngle = 180.0 - rawAngle;
@@ -236,12 +236,10 @@ void loop() {
   } else if (invertedAngle < -180.0) {
     invertedAngle += 360.0;
   }
-  float accelAngle = invertedAngle; // Esta é a sua "âncora" do acelerômetro
+  float accelAngle = invertedAngle;
 
   // Ângulo do Giroscópio
   // Mede a *mudança* de ângulo "rápida" desde o último loop
-  // O sinal de (-) é para inverter o giroscópio para
-  // bater com a sua inversão (180 - rawAngle)
   float gyroAngleChange = -gyroZ * dt; 
 
   // Filtro: 98% (Giro) + 2% (Acel)
@@ -281,7 +279,7 @@ void loop() {
     normalized_value = 0.0;
   }
 
-  // Aplicar correção gamma (como antes)
+  // Aplicar correção gamma
   float corrected_value = pow(normalized_value, GAMMA_VALUE);
 
   // Mapear para faixa DUTY_MINIMO até DUTY_MAXIMO
@@ -300,7 +298,7 @@ void loop() {
     lastSendTime = currentTimeMs;
 
     // Mostrar no Serial Monitor
-    Serial.print("Yaw: "); // <-- MUDANÇA
+    Serial.print("Yaw: "); 
     Serial.print(complementaryAngle, 1); // Imprime o ângulo Yaw
     Serial.print("° | Duty PWM: ");
     Serial.print(dutyValue);
@@ -317,7 +315,7 @@ void loop() {
 }
 
 
-// ---------- Funções auxiliares (Sem mudanças) ----------
+// ---------- Funções auxiliares ----------
 uint8_t readRegisterMPU(uint8_t reg) {
   uint8_t value;
   digitalWrite(HSPI_CS, LOW);
